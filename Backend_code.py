@@ -76,8 +76,8 @@ def caesar_cipher_decrypt(text, shift):
 def generate_key_pair():
     public_key, private_key = rsa.newkeys(2048)
 
-    public_key_path = "C:\\Users\\HARINI\\Downloads\\Encryption\\public_key.pem"
-    private_key_path = "C:\\Users\\HARINI\\Downloads\\Encryption\\private_key.pem"
+    public_key_path = "Path\\To\\Your\\File"
+    private_key_path = "Path\\To\\Your\\File"
     
     
     with open(public_key_path, "wb") as f:
