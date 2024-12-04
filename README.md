@@ -32,7 +32,7 @@ To run this process locally on your machine, follow these steps:
 1. Clone the repository to your local machine.
 
 ```bash
-git clone https://github.com/
+git clone https://github.com/j4ik2i5x0/CipherGen.git
 ```
 ```bash
 cd Cybercrypt
