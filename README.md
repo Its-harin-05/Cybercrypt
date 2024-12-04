@@ -1,4 +1,4 @@
-<h1>Cybercrypt</h1>
+<h1>CipherGen</h1>
 Applying Innovative Encryption for safeguarding Digital Information. This project implements a multi-layer encryption and decryption system using Monoalphabetic, Caesar Cipher, and RSA algorithms. 
 
 <h2>Key Features</h2>
@@ -23,7 +23,7 @@ Applying Innovative Encryption for safeguarding Digital Information. This projec
 
 - **Base64:** Python's standard library module for encoding and decoding Base64.
 
-- **Frontend:** HTML/CSS/JavaScript: Standard web technologies used for creating the user interface
+- **Frontend:** HTML/CSS(Tailwind)/JavaScript: Standard web technologies used for creating the user interface
 
 <h2>Getting Started</h2>
 
@@ -32,7 +32,7 @@ To run this process locally on your machine, follow these steps:
 1. Clone the repository to your local machine.
 
 ```bash
-git clone https://github.com/IPHive-24/Cybercrypt.git
+git clone https://github.com/
 ```
 ```bash
 cd Cybercrypt
@@ -109,7 +109,7 @@ The performance of this encryption-decryption system can be evaluated based on:
 
 <h2>Contribution</h2>
 
-Contributions to the Cybercrypt project are welcome! If you have any ideas for improvements, feature requests, or bug reports, please feel free to open an issue or submit a pull request. Your contributions will help make the application more robust and beneficial for users.
+Contributions to the CipherGen project are welcome! If you have any ideas for improvements, feature requests, or bug reports, please feel free to open an issue or submit a pull request. Your contributions will help make the application more robust and beneficial for users.
   
 
 
