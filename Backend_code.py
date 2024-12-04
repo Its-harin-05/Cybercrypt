@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
 import rsa 
 from rsa import PrivateKey
 import base64  
@@ -7,6 +7,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app) 
+
 
 
 # monoalphabetic key generating
@@ -75,9 +76,8 @@ def caesar_cipher_decrypt(text, shift):
 # key generating for rsa
 def generate_key_pair():
     public_key, private_key = rsa.newkeys(2048)
-
-    public_key_path = "Path\\To\\Your\\File"
-    private_key_path = "Path\\To\\Your\\File"
+    public_key_path = r"C:\Users\jaikr\Music\encryption\public_key.pem"
+    private_key_path = r"C:\Users\jaikr\Music\encryption\private_key.pem"
     
     
     with open(public_key_path, "wb") as f:
@@ -88,12 +88,12 @@ def generate_key_pair():
     
     return public_key_path, private_key_path
 
-def save_keys(public_key, private_key, public_key_path, private_key_path):
+'''def save_keys(public_key, private_key, public_key_path, private_key_path):
     with open(public_key_path, 'wb') as file:
         file.write(public_key.save_pkcs1(format='PEM'))
 
     with open(private_key_path, 'wb') as file:
-        file.write(private_key.save_pkcs1(format='PEM'))
+        file.write(private_key.save_pkcs1(format='PEM'))'''
 
 # rsa encryption
 def encrypt_message(message, public_key_path):
@@ -102,6 +102,7 @@ def encrypt_message(message, public_key_path):
         
     encrypted_message = rsa.encrypt(message.encode(), public_key)
     return encrypted_message
+
 
 
 @app.route('/')
@@ -142,6 +143,7 @@ def decrypt():
         print("Received shift value:", shift_value)
 
 
+
         # Load the private key from file
         with open("private_key.pem", "rb") as f:
             private_key_str = f.read()
@@ -174,6 +176,7 @@ def decrypt():
     except Exception as e:
         print("Decryption Error:", str(e))
         return jsonify({'error': str(e)})
+
 
 
 @app.route('/generate_key_pair', methods=['GET'])

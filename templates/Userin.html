@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CipherGuard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-cover bg-center bg-no-repeat min-h-screen" style="background-image: url('static/images/bgpic.jpg');">
+
+  <div class="container mx-auto p-6 flex flex-col items-center">
+    <h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300/80 via-purple-400/70 to-pink-500/80">Cipher</span> Gen.
+    </h1>
+    
+    
+    <div class="flex flex-col md:flex-row justify-between w-full max-w-6xl space-y-8 md:space-y-0 md:space-x-8">
+      
+      <!-- Encoder Section -->
+      <div class="w-full md:w-1/2 bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+        <h2 class="text-white text-2xl mb-4">Encoder</h2>
+
+        <div class="mb-4">
+          <label for="inputText" class="block text-white text-lg mb-2">Input Text</label>
+          <textarea id="inputText" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Enter the text to encrypt"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-white text-lg mb-2">Cipher Options</h3>
+          <label class="flex items-center mb-2 text-white">
+            <input type="checkbox" id="monoCipher" class="mr-2" value="monoalphabetic"> Monoalphabetic Cipher
+          </label>
+          <label class="flex items-center text-white">
+            <input type="checkbox" id="caesarCipher" class="mr-2" value="caesar"> Caesar Cipher
+          </label>
+        </div>
+        <div class="mb-4">
+          <label for="shift-value" class="text-white text-lg">Shift Value</label>
+          <input type="number" id="shift-value" min="1" max="25" value="1" class="ml-3 p-2 rounded-md">
+        </div>
+        <div class="mb-4">
+          <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" onclick="generateKeyPairs()">Generate Key Pair</button>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <h3 class="text-white text-lg mb-2">Public Key</h3>
+            <textarea id="publicKey" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Public key will appear here."></textarea>
+          </div>
+          <div>
+            <h3 class="text-white text-lg mb-2">Private Key</h3>
+            <textarea id="privateKey" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Private key will appear here."></textarea>
+          </div>
+        </div>
+        <div class="mt-4">
+          <button id="encoderButton" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg">Encrypt</button>
+        </div>
+
+        <div class="mt-4">
+          <a id="downloadEncryptedFileLink" href="/encrypt" download class="text-blue-300">Download Encrypted File</a>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <!-- Decoder Section -->
+      <div class="w-full md:w-1/2 bg-white/10 p-6 rounded-lg backdrop-blur-sm">
+        <h2 class="text-white text-2xl mb-4">Decoder</h2>
+
+        <div class="mb-4">
+          <h3 class="text-white text-lg mb-2">Encrypted Content</h3>
+          <textarea id="decoderEncryptedContent" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Enter the encrypted content"></textarea>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-white text-lg mb-2">Enter Private Key</h3>
+          <textarea id="privateKeyInput" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Paste your private key here."></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label for="shift-num" class="text-white text-lg">Shift Value</label>
+          <input type="number" id="shift-num" min="1" max="25" value="1" class="ml-3 p-2 rounded-md">
+        </div>
+
+        <div class="mt-4">
+          <button id="decryptButton" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg">Decrypt</button>
+        </div>
+
+        <div class="mt-4">
+          <h3 class="text-white text-lg mb-2">Recovered Text</h3>
+          <textarea id="recoveredText" rows="5" class="w-full p-3 rounded-lg bg-white/20 text-white" placeholder="Display Recovered text"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    document.getElementById('encoderButton').addEventListener('click', function() {
+      var message = document.getElementById('inputText').value;
+      var shiftValue = document.getElementById('shift-value').value;
+
+      var formData = new FormData();
+      formData.append('message', message);
+      formData.append('shift', shiftValue);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:5000/encrypt', true);
+      xhr.responseType = 'blob';
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var reader = new FileReader();
+          reader.onload = function() {
+            var encoded_encrypted_message = reader.result;
+            document.getElementById('decoderEncryptedContent').value = encoded_encrypted_message;
+          };
+          reader.readAsText(xhr.response);
+        }
+      };
+
+      xhr.send(formData);
+    });
+
+    document.getElementById('decryptButton').addEventListener('click', function() {
+      var encryptedTxt = document.getElementById('decoderEncryptedContent').value;
+      var privateKey = document.getElementById('privateKeyInput').value;
+      var shiftValue = document.getElementById('shift-num').value;
+
+      var formData = new FormData();
+      formData.append('encoded_encrypted_message', encryptedTxt);
+      formData.append('private_key', privateKey);
+      formData.append('shift_value', shiftValue);
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://localhost:5000/decrypt', true);
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          if (response.hasOwnProperty('decrypted_text')) {
+            var decryptedMessage = response.decrypted_text;
+            document.getElementById('recoveredText').value = decryptedMessage;
+          }
+        }
+      };
+
+      xhr.send(formData);
+    });
+
+    function generateKeyPairs() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://localhost:5000/generate_key_pair', true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var keyPair = JSON.parse(xhr.responseText);
+          document.getElementById('publicKey').textContent = keyPair.publicKey;
+          document.getElementById('privateKey').textContent = keyPair.privateKey;
+        }
+      };
+      xhr.send();
+    }
+  </script>
+
+</body>
+</html>
